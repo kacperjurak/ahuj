@@ -1,0 +1,11 @@
+### Add
+GET http://127.0.0.1:8080/api/calculator/add
+Content-Type: application/json
+
+{
+  "x": 3,
+  "y": 5
+}
+
+### History
+GET http://127.0.0.1:8080/api/history?id=3

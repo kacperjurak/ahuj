@@ -1,0 +1,34 @@
+version: '3.8'
+
+x-shared-db-user: &shared-db-user 'user'
+x-shared-db-pass: &shared-db-pass 'password'
+x-shared-db-name: &shared-db-name 'db'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+    environment:
+      APP_HOST: ''
+      APP_PORT: '8080'
+      DB_HOST: db
+      DB_PORT: '3306'
+      DB_USER: *shared-db-user
+      DB_PASS: *shared-db-pass
+      DB_NAME: *shared-db-name
+    ports:
+      - "8080:8080"
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: *shared-db-name
+      MYSQL_USER: *shared-db-user
+      MYSQL_PASSWORD: *shared-db-pass
+      MYSQL_ROOT_PASSWORD: *shared-db-pass
+    ports:
+      - '4306:3306'
+    volumes:
+      - ./.docker/volumes/db:/var/lib/mysql
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
